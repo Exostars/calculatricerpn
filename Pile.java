@@ -5,6 +5,7 @@ public class Pile {
 	private String chaineBrute;
     private String separator;
     boolean interactif = false;
+    boolean trace = false;
     
     public Pile(){}
 
@@ -76,6 +77,15 @@ public class Pile {
 		}		
 	}
 	
+	public void setTrace(boolean b){
+		if(b == true){
+			this.trace = true;
+		}
+		else{
+			this.trace = false;
+		}
+	}
+	
 	public double factorielle(double n)
 	{
 		if (n <= 1)
@@ -83,9 +93,35 @@ public class Pile {
 		else
 		    return  n * factorielle(n - 1);
 	}
+	
+	void reverse(double[] tab)
+	{
+		int tailleTableau = tab.length;
+        int i = 0;
+        double temp = 0;
+        for (i = 0 ; i < tailleTableau / 2 ; i++)
+        {
+                temp = tab[i];
+                tab[i] = tab[tailleTableau - i - 1];
+                tab[tailleTableau - i - 1] = temp;
+        }
+	}
+	
+	public void tracePile(double[] n)
+	{
+		reverse(n);
+		System.out.println("\n");
+		for (double nb : n){
+			if (nb != 0){
+				System.out.println(nb);
+			}			
+		}
+		reverse(n);
+	}
 
     public void traitement(Pile pile)
     {
+    	setTrace(false);
     	double[] n = {0, 0, 0};
         int i = 0;
         int k = 0;
@@ -156,25 +192,34 @@ public class Pile {
     						n[k-1] = factorielle(n[k-1]);
     						break;
     					case "stop":
+    						stop = true;
     						System.exit(0);
     						break;
     					case "pile":
-    						for (double nb : n)
-    						{
-    							if (nb != 0)
-    							{
-    								System.out.println(nb);
-    							}							
-    						}
+    						tracePile(n);
     						break;
     					case "result":
     						result = n[0];
     						System.out.println(result);
+    						break;
+    					case "trace":
+    						if(this.trace == false){
+    							setTrace(true);
+    							System.out.println("\nTrace : ON");
+    						}
+    						else{
+    							setTrace(false);
+    							System.out.println("\nTrace : OFF");
+    						}    							
+    						break;
     					default:
     					    System.out.println(c + "Erreur");
     					    break;
-                    }
-                }                
+                    }                    
+                }    
+                if (this.trace == true){
+                	tracePile(n);
+                }
     		}
     	}
     	else if (this.interactif == false)
